@@ -1,0 +1,41 @@
+﻿@using Ext.Net
+@using Ext.Net.MVC
+
+@{
+    Layout = null;
+}
+@Html.X().ResourceManager()
+@Html.X().Viewport().Layout(LayoutType.Border).Items(
+    Html.X().Panel().Title("货币管理系统").Region(Region.West).Width(250).Items(
+        Html.X().TreePanel().Title("系统设置").Width(200).RootVisible(false).Root(
+            Html.X().Node().NodeID("root").Expanded(true).Children(
+                Html.X().Node().Text("货币管理").NodeID("CurrencyManagement").Href("~/Currencies/Index").Leaf(true)
+            )
+        )
+    ),
+    Html.X().GridPanel().Region(Region.Center).Title("货币").Store(
+        Html.X().Store().Model(
+            Html.X().Model().Fields(
+                new ModelField("CurrencyID", ModelFieldType.Int),
+                new ModelField("CountryName"),
+                new ModelField("CurrencyCode"),
+                new ModelField("CurrencyName")
+            )
+        ).Proxy(
+            Html.X().AjaxProxy().Url(Url.Action("GetCurrencies", "Currencies")).Reader(
+                Html.X().JsonReader().Root("data")
+            )
+        )
+    ).ColumnModel(
+        Html.X().Column().Text("ID").DataIndex("CurrencyID").Flex(1),
+        Html.X().Column().Text("国家").DataIndex("CountryName").Flex(1),
+        Html.X().Column().Text("代码").DataIndex("CurrencyCode").Flex(1),
+        Html.X().Column().Text("名称").DataIndex("CurrencyName").Flex(1)
+    ).TopBar(
+        Html.X().Toolbar().Items(
+            Html.X().Button().Text("添加").Icon(Icon.Add),
+            Html.X().Button().Text("编辑").Icon(Icon.Pencil),
+            Html.X().Button().Text("删除").Icon(Icon.Delete)
+        )
+    )
+)
